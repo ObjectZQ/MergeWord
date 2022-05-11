@@ -2,7 +2,7 @@
 require_once "TbsZip.php";
 
 /**
- * MergeWordUtil version 1.0
+ * MergeWordUtil version 1.0.0
  * Date    : 2022-05-08
  * Author  : ZQ
  * 合并word文档工具类
@@ -44,16 +44,14 @@ final class MergeWordUtil{
     /**
      * 合并多个word文档
      * @param TbsZip $zip TbsZip对象（防止创建多个TbsZip对象浪费内存资源）
-     * @param $workId 项目ID
      * @param Array $word word文档的路径（数组）
-     * @param String $resword 要生成的word文档的路径  格式：$dir.'result.docx'
+     * @param String $result 要生成的word文档的路径  格式：$dir.'result.docx'
      * @return boolean True|False
      */
-    public static function mergeWord($zip,$workId,$words,$resword="upload/word/result.docx"){
+    public static function mergeWord($zip,$words,$result){
         $content = "";
         for($i=1;$i<count($words);$i++){
-            $word = MergeWordUtil::getWordPath($words[$i],$workId);
-            $curContent = MergeWordUtil::getContent($zip,$word);
+            $curContent = MergeWordUtil::getContent($zip,$words[$i]);
             if($curContent == false){
                 return false;
             }
@@ -61,36 +59,22 @@ final class MergeWordUtil{
             $content = $content.$curContent;
         }
 
-        $word0 = MergeWordUtil::getWordPath($words[0],$workId);
-        if(!file_exists($word0)){
-            echo "<P>".$word0."文件不存在"."</p>";
+        if(!file_exists($words[0])){
+            echo "<P>".$words[0]."文件不存在"."</p>";
             return false;
         }
         // Insert into the second document
-        $zip->Open($word0);
+        $zip->Open($words[0]);
         $contents = $zip->FileRead('word/document.xml');
         $p = strpos($contents, '</w:body>');
         if ($p===false) return false;
         $contents = substr_replace($contents, $content, $p, 0);
         $zip->FileReplace('word/document.xml', $contents, TBSZIP_STRING);
 
-        $result = MergeWordUtil::getWordPath($resword,$workId);
         // Save the merge into a third file
         $zip->Flush(TBSZIP_FILE, $result);
         $zip->Close();
 
         return true;
-    }
-
-    /**
-     * 格式化word文档的路径
-     * @param String $word word文档的路径
-     * @param $workId 项目ID
-     * @return String word文档的路径
-     */
-    public static function getWordPath($word, $workId){
-        $p = strpos($word, '.');
-
-        return substr_replace($word, $workId, $p, 0);
     }
 }
