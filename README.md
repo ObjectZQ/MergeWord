@@ -1,9 +1,9 @@
-# MergeWord
-A PHP library for merge word documents
----merge docx files on one file---
+# MergeWord(PHP合并Word文档)
+A PHP library for merge word documents（用于合并word文档的PHP库）
+---merge docx files on one file（将多个docx文件合并成一个）---
 
 
-## Usage
+## Usage（用法示例）
 ```php
 require "MergeWord/MergeWordUtil.php"
 
@@ -23,6 +23,6 @@ if(MergeWordUtil::mergeWord($zip, $words, $dir."result.docx")) {
 
 ```
 
-## Contributing
+## Contributing（贡献）
 
----welcome to discuss a ideas, features and bugs---
+---welcome to discuss a ideas, features and bugs（欢迎讨论一个想法、功能和缺陷）---
