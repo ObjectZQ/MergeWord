@@ -15,7 +15,7 @@ $word2 = $dir."word2.docx";
 $word3 = $dir."word3.docx";
 $words = array($word1, $word2, $word3);
 
-if(MergeWordUtil::mergeWord($words, $dir."result.docx")) {
+if(MergeWordUtil::mergeWord($zip, $words, $dir."result.docx")) {
     echo "Success!!!";
 } else {
     echo "Fail!!!";
